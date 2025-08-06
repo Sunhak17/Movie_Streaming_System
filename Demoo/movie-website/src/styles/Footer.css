@@ -1,0 +1,181 @@
+/* Footer Styles */
+.footer {
+    background: #111 !important;
+    color: #fff !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 5px solid red !important; /* TEST BORDER - remove after confirming CSS loads */
+}
+
+/* App Experience Section */
+.app-section {
+    background: #000;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-bottom: 1px solid #333;
+}
+
+.app-title {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    color: white;
+}
+
+.experience-text {
+    color: #00cc66;
+    font-weight: 600;
+}
+
+.platform-icons {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.platform-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.platform-item:hover {
+    transform: translateY(-3px);
+}
+
+.platform-icon {
+    background: #333;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+}
+
+.platform-item:hover .platform-icon {
+    background: #444;
+}
+
+.platform-item span {
+    font-size: 0.9rem;
+    color: #ccc;
+    font-weight: 400;
+}
+
+/* Main Footer Content */
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+    padding: 2.5rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #000;
+}
+
+.footer-column h3 {
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+    color: #ccc;
+    font-weight: 400;
+    text-transform: none;
+}
+
+.green-text {
+    color: #00cc66;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+    color: #999;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s ease;
+    font-weight: 300;
+}
+
+.footer-links a:hover {
+    color: #00cc66;
+}
+
+/* Copyright Section */
+.footer-bottom {
+    background: #000;
+    text-align: center;
+    padding: 1.5rem;
+    border-top: 1px solid #222;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: #666;
+    font-size: 0.8rem;
+    font-weight: 300;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        padding: 2rem 1rem;
+    }
+
+    .platform-icons {
+        gap: 1.5rem;
+    }
+
+    .platform-item {
+        min-width: 80px;
+    }
+
+    .platform-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+
+    .app-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        text-align: center;
+    }
+
+    .platform-icons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .app-section {
+        padding: 2rem 1rem;
+    }
+
+    .app-title {
+        font-size: 1.3rem;
+    }
+}

@@ -1,0 +1,73 @@
+.edit-profile-container, .edit-password-container {
+  background: #232a2f;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.edit-profile-container h2, .edit-password-container h2 {
+  color: #b7e4c7;
+  margin-bottom: 1.5rem;
+}
+.edit-profile-container label, .edit-password-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #b7e4c7;
+}
+.edit-profile-container input, .edit-password-container input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #495057;
+  background: #2c343a;
+  color: #fff;
+}
+.edit-profile-container button, .edit-password-container button {
+  background: #6fcf97;
+  color: #232a2f;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+.edit-profile-container .error, .edit-password-container .error {
+  color: #ff6b6b;
+  margin-top: 0.5rem;
+}
+.plan-details-container {
+  background: #232a2f;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.plan-details-container h2 {
+  color: #b7e4c7;
+  margin-bottom: 1.5rem;
+}
+.plan-details-container .plan-card {
+  background: #2c343a;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+.plan-details-container .upgrade-btn {
+  background: #6fcf97;
+  color: #232a2f;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+.plan-details-container .payment-error {
+  color: #ff6b6b;
+  margin-top: 0.5rem;
+}

@@ -1,0 +1,34 @@
+{
+  "name": "watch2day-backend",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "seed": "node src/seed.js"
+  },
+  "keywords": [
+    "express",
+    "streaming",
+    "api",
+    "authentication"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "Backend API for Watch2Day streaming platform",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "canvas": "^3.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.14.3",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

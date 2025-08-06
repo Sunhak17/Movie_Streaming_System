@@ -1,0 +1,209 @@
+/* Profile.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  color: #e0f2f1;
+}
+
+.profile-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #121212;
+}
+
+/* Sidebar */
+.sidebar {
+  flex: 0 0 240px;
+  background-color: #1b1f1d;
+  padding: 1rem;
+  color: #a5d6a7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar .user-info {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar span {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.join-premier {
+  background-color: #43a047;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-bottom: 2rem;
+  cursor: pointer;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.nav-menu {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.nav-menu li {
+  padding: 0.7rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.nav-menu li:hover {
+  background-color: #2e7d32;
+  color: white;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background-color: #1a1a1a;
+}
+
+.back-to-home-btn {
+  background-color: #2e7d32;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Cards */
+.wallet-card,
+.profile-card,
+.security-card,
+.devices-card {
+  background-color: #263238;
+  padding: 1rem;
+  border-radius: 12px;
+  margin: 1rem 0;
+  color: #a5d6a7;
+}
+
+.profile-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+}
+
+.wallet-section,
+.profile-section,
+.security-section,
+.devices-section,
+.app-promo {
+  margin-top: 2rem;
+}
+
+.wallet-balance {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.subscribe-btn,
+.edit-btn,
+.manage-btn {
+  background-color: #388e3c;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: white;
+  margin-top: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* App Promo */
+.app-options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.app-options button {
+  background-color: #2e7d32;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Footer */
+.footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: white;
+  background-color: #2e7d32;
+}
+
+.footer div {
+  flex: 1 1 200px;
+  margin: 0.5rem;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .profile-page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex: none;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 1rem 0.5rem;
+    overflow-x: auto;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-avatar {
+    margin-bottom: 1rem;
+  }
+
+  .footer {
+    flex-direction: column;
+  }
+
+  .footer div {
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,212 @@
+/* Navigation bar */
+.navBar {
+    background-color: transparent !important; /* Transparent background */
+    position: fixed;      /* Fix at top */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;       /* Make sure it's above everything */
+    box-shadow: none;    /* Remove any shadow */
+    padding: 30px 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Keep text and links white for readability on banner */
+.navLeft li a,
+.navRight li a,
+.logout-button,
+.my-account-button,
+.admin-panel-button {
+    color: white !important;
+}
+
+/* Adjust hover colors to bright green */
+.navLeft li a:hover,
+.navRight li a:hover {
+    color: #00cc66 !important;  /* Bright green hover */
+}
+
+/* Dropdown background - dark semi-transparent for readability */
+.dropdown {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    color: white;
+}
+
+/* Dropdown links - white text */
+.dropdown a {
+    color: white !important;
+}
+
+/* Dropdown hover */
+.dropdown a:hover {
+    opacity: 0.8;
+    background: none !important;
+}
+
+/* Show dropdown on hover */
+.navLeft li:hover > .dropdown {
+    display: block;
+}
+
+/* Nested dropdown styles */
+.dropdown ul {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: #0b3d1a;  /* Dark green background */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    width: 180px;
+}
+
+.dropdown li:hover > ul {
+    display: block;
+}
+
+/* Additional menu effects */
+.choose {
+    display: flex;
+    flex-direction: row;
+    color: #004d1a; /* Dark green text */
+    margin-left: 200px;
+    list-style-type: none;
+    cursor: pointer;
+}
+
+.choose a {
+    color: #007f33; /* Medium green */
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+    padding-right: 2em;
+}
+
+.choose a:hover {
+    opacity: 0.7;
+}
+
+.navRight ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 10px;
+}
+
+/* Green theme logout button */
+.logout-button {
+    padding: 8px 16px;
+    background-color: #00cc66;  /* Bright green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #00994d; /* Darker green */
+}
+
+/* Admin Panel Button */
+.admin-panel-button {
+    padding: 8px 16px;
+    background-color: #ff9800 !important;  /* Orange for admin */
+    color: white !important;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.admin-panel-button:hover {
+    background-color: #f57c00 !important; /* Darker orange */
+}
+
+/* Search Icon */
+.searchIcon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.searchIcon:hover {
+    transform: scale(1.1);
+}
+
+/* Search Container */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    width: 200px;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #00cc66;  /* Bright green focus */
+}
+
+.search-button {
+    padding: 8px 16px;
+    background-color: #00cc66; /* Bright green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #00994d; /* Darker green */
+}
+
+/* Close Search Button */
+.close-search {
+    padding: 8px;
+    background-color: transparent;
+    color: #00cc66;  /* Bright green */
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-search:hover {
+    color: #00994d;  /* Darker green */
+}
+
+/* My Account Button */
+.navRight .my-account-button {
+    padding: 8px 16px;
+    background-color: #00cc66; /* Bright green background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navRight .my-account-button:hover {
+    background-color: #00994d; /* Darker green background */
+    color: white !important;
+}
