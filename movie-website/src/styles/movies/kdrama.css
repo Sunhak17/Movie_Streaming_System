@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -9,8 +11,6 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #fff;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
 
 /* Hero Section Styles - Same as Home */
 .hero-section {

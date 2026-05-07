@@ -15,11 +15,9 @@ import MyList from './pages/movies/myList';
 import EditProfile from './pages/user/EditProfile';
 import EditPassword from './pages/user/EditPassword';
 import ManageDevices from './pages/user/ManageDevices';
-import AdminDashboard from './pages/admin/AdminDashboard';
 import { AuthProvider } from './components/auth/AuthContext';
 import { WatchlistProvider } from './components/watchlist/Watchlist_Context';
 import PrivateRoute from './components/auth/PrivateRoute';
-import AdminRoute from './components/auth/AdminRoute';
 import Subscription from './pages/subscription/Subscription';
 import Watchlist from './pages/watchlist/Watchlist';
 
@@ -46,7 +44,6 @@ const App = () => {
                         <Route path="/subscription" element={<PrivateRoute><Subscription /></PrivateRoute>} />
                         <Route path="/watchlist" element={<PrivateRoute><Watchlist /></PrivateRoute>} />
                         <Route path="/myList" element={<PrivateRoute><MyList /></PrivateRoute>} />
-                        <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
                     </Routes>
                 </Router>
             </WatchlistProvider>

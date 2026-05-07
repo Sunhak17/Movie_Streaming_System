@@ -36,13 +36,7 @@ const Login = () => {
       const result = await login(email, password, rememberMe);
       if (result.success) {
         alert('Login successful!');
-        
-        // Check if user is admin and redirect accordingly
-        if (result.user?.role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/home');
-        }
+        navigate('/home');
       } else {
         alert(result.message || 'Invalid email or password');
       }
