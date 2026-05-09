@@ -37,6 +37,12 @@ const Login = () => {
     }
   };
 
+  const fillDemo = () => {
+    setEmail('admin123@gmail.com');
+    setPassword('admin12345');
+    setError('');
+  };
+
   return (
     <div className="back-office-login">
       <div className="login-shell">
@@ -70,9 +76,14 @@ const Login = () => {
 
             {error ? <div className="login-error">{error}</div> : null}
 
-            <button type="submit" disabled={isLoading}>
-              {isLoading ? 'Signing in...' : 'Sign in'}
-            </button>
+            <div style={{display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'space-between'}}>
+              <button type="button" onClick={fillDemo} style={{background: 'transparent', color: '#93c5fd', border: 'none', cursor: 'pointer'}}>Use demo</button>
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? 'Signing in...' : 'Sign in'}
+              </button>
+            </div>
+
+            <p style={{marginTop:12, color:'#94a3b8', fontSize:12}}>Demo admin: <strong>admin123@gmail.com</strong> / <strong>admin12345</strong></p>
           </form>
         </div>
       </div>

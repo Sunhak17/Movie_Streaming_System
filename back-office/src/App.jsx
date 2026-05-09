@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './components/auth/AuthContext';
 import AdminRoute from './components/auth/AdminRoute';
 import Login from './pages/auth/Login';
-import AdminDashboard from './pages/admin/AdminDashboard';
+import Dashboard from './pages/admin/Dashboard/Dashboard';
+import UserManagement from './pages/admin/UserManagement/UserManagement';
+import MovieManagement from './pages/admin/MovieManagement/MovieManagement';
 
 const App = () => {
   return (
@@ -12,8 +14,17 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminRoute><Dashboard /></AdminRoute>} />
+          <Route path="/admin/users" element={<AdminRoute><UserManagement /></AdminRoute>} />
+          <Route path="/admin/movies" element={<AdminRoute><MovieManagement /></AdminRoute>} />
+          <Route path="/admin/movies/cdrama" element={<AdminRoute><MovieManagement genre="cdrama" /></AdminRoute>} />
+          <Route path="/admin/movies/kdrama" element={<AdminRoute><MovieManagement genre="kdrama" /></AdminRoute>} />
+          <Route path="/admin/movies/hollywood" element={<AdminRoute><MovieManagement genre="hollywood" /></AdminRoute>} />
+          <Route path="/admin/customers" element={<AdminRoute><UserManagement /></AdminRoute>} />
+          
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </Router>
     </AuthProvider>
