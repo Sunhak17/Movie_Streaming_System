@@ -136,6 +136,60 @@ export const toggleUserStatus = async (req, res) => {
   }
 };
 
+// Update user
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userData = req.body;
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const nextRole = userData.role !== undefined ? userData.role : user.role;
+    const nextSubscription = userData.subscription_plan !== undefined ? userData.subscription_plan : user.subscription_plan;
+
+    if (userData.role !== undefined && !['user', 'admin'].includes(userData.role)) {
+      return res.status(400).json({ success: false, message: 'Invalid role' });
+    }
+
+    if (userData.subscription_plan !== undefined && userData.subscription_plan !== null && !['Basic', 'Standard', 'Premium'].includes(userData.subscription_plan)) {
+      return res.status(400).json({ success: false, message: 'Invalid subscription plan' });
+    }
+
+    await user.update({
+      user_name: userData.user_name || user.user_name,
+      user_email: userData.user_email || user.user_email,
+      role: nextRole,
+      is_active: userData.is_active !== undefined ? Boolean(userData.is_active) : user.is_active,
+      subscription_plan: nextSubscription === '' ? null : nextSubscription,
+      updated_at: new Date()
+    });
+
+    res.json({
+      success: true,
+      message: 'User updated successfully',
+      data: {
+        user_id: user.user_id,
+        user_name: user.user_name,
+        user_email: user.user_email,
+        role: user.role,
+        is_active: user.is_active,
+        subscription_plan: user.subscription_plan
+      }
+    });
+  } catch (error) {
+    console.error('updateUser error:', error);
+
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(400).json({ success: false, message: 'Email already exists' });
+    }
+
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
 // Get all movies
 export const getAllMovies = async (req, res) => {
   try {
@@ -234,6 +288,7 @@ export const updateMovie = async (req, res) => {
       title: movieData.title || movie.title,
       description: movieData.description !== undefined ? movieData.description : movie.description,
       genre_id: genre_id,
+      category: movieData.category ? movieData.category.toLowerCase() : movie.category,
       release_year: movieData.release_year || movie.release_year,
       rating: movieData.rating !== undefined ? movieData.rating : movie.rating,
       image: movieData.poster_url !== undefined ? movieData.poster_url : movie.image

@@ -68,6 +68,44 @@ const UserManagement = () => {
     }
   };
 
+  const handleEditUser = async (userRow) => {
+    const user_name = window.prompt('Edit user name:', userRow.user_name);
+    if (user_name === null) return;
+
+    const user_email = window.prompt('Edit user email:', userRow.user_email);
+    if (user_email === null) return;
+
+    const role = window.prompt('Edit role (user/admin):', userRow.role);
+    if (role === null) return;
+
+    const subscription_plan = window.prompt('Edit subscription (Basic/Standard/Premium or leave blank):', userRow.subscription_plan || '');
+    if (subscription_plan === null) return;
+
+    const isActiveAnswer = window.confirm('Click OK for Active, Cancel for Inactive');
+
+    try {
+      const response = await fetchWithAuth(`${API_BASE}/admin/users/${userRow.user_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          user_name: user_name.trim(),
+          user_email: user_email.trim(),
+          role: role.trim(),
+          subscription_plan: subscription_plan.trim(),
+          is_active: isActiveAnswer
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setUsers((currentUsers) => currentUsers.map((item) => item.user_id === userRow.user_id ? { ...item, ...data.data } : item));
+      } else {
+        window.alert(data.message || 'Failed to update user');
+      }
+    } catch (error) {
+      window.alert(error.message || 'Failed to update user');
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -114,6 +152,7 @@ const UserManagement = () => {
                   <th style={{ textAlign: 'left', padding: '12px' }}>Role</th>
                   <th style={{ textAlign: 'left', padding: '12px' }}>Status</th>
                   <th style={{ textAlign: 'left', padding: '12px' }}>Subscription</th>
+                  <th style={{ textAlign: 'left', padding: '12px' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -145,10 +184,28 @@ const UserManagement = () => {
                       </span>
                     </td>
                     <td style={{ padding: '12px' }}>{u.subscription_plan || 'Free'}</td>
+                    <td style={{ padding: '12px' }}>
+                      <button
+                        type="button"
+                        onClick={() => handleEditUser(u)}
+                        style={{
+                          border: '1px solid rgba(4,211,97,0.35)',
+                          background: 'rgba(4,211,97,0.12)',
+                          color: '#04d361',
+                          borderRadius: '8px',
+                          padding: '6px 10px',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          fontWeight: 600
+                        }}
+                      >
+                        Edit
+                      </button>
+                    </td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan="6" style={{ padding: '20px', textAlign: 'center', color: '#666' }}>No users found</td>
+                    <td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: '#666' }}>No users found</td>
                   </tr>
                 )}
               </tbody>

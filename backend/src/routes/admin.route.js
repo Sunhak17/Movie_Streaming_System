@@ -11,6 +11,7 @@ import {
   getUserStats,
   deleteUser,
   toggleUserStatus,
+  updateUser,
   getGenres,
   uploadPoster
 } from '../controllers/admin.controller.js';
@@ -42,6 +43,7 @@ router.get('/users', getAllUsers);
 router.get('/users/stats', getUserStats);
 router.delete('/users/:id', deleteUser);
 router.put('/users/:id/toggle-status', toggleUserStatus);
+router.put('/users/:id', updateUser);
 
 // Movie management routes
 router.get('/movies', getAllMovies);

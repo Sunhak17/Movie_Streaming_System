@@ -3,6 +3,41 @@
   width: 100%;
 }
 
+.dashboard-header {
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dashboard-tab {
+  padding: 8px 16px;
+  background: transparent;
+  color: #a7bdb6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  transition: all 0.2s;
+}
+
+.dashboard-tab.active {
+  background: rgba(4,211,97,0.2);
+  color: #04d361;
+  font-weight: 600;
+}
+
+.dashboard-tab:hover {
+  color: #e6f9f0;
+}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 320px;

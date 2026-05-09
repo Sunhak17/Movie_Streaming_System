@@ -75,14 +75,10 @@ const MovieManagement = ({ genre }) => {
       if (data.success) {
         let filtered = data.data;
         
-        // Filter by genre if specified
+        // Filter by category if specified
         if (genre) {
-          const genreMap = { cdrama: 11, kdrama: 12, hollywood: 13 };
-          const genreId = genreMap[genre];
-          if (genreId) {
-            filtered = filtered.filter(m => m.genre_id == genreId);
-            console.log(`✅ Filtered ${genre}: ${filtered.length} movies`);
-          }
+          filtered = filtered.filter(m => (m.category || '').toLowerCase() === genre.toLowerCase());
+          console.log(`✅ Filtered ${genre}: ${filtered.length} movies`);
         }
         
         console.log(`✅ Movies loaded: ${filtered.length} movies`);
@@ -94,6 +90,41 @@ const MovieManagement = ({ genre }) => {
       console.error('💥 Error fetching movies:', error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEditMovie = async (movieRow) => {
+    const title = window.prompt('Edit movie title:', movieRow.title);
+    if (title === null) return;
+
+    const category = window.prompt('Edit category (cdrama/kdrama/hollywood):', movieRow.category || 'cdrama');
+    if (category === null) return;
+
+    const release_year = window.prompt('Edit release year:', movieRow.release_year || '');
+    if (release_year === null) return;
+
+    const rating = window.prompt('Edit rating:', movieRow.rating ?? '');
+    if (rating === null) return;
+
+    try {
+      const response = await fetchWithAuth(`${API_BASE}/admin/movies/${movieRow.id || movieRow.movie_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          title: title.trim(),
+          category: category.trim().toLowerCase(),
+          release_year: release_year.trim(),
+          rating: rating.trim()
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setMovies((currentMovies) => currentMovies.map((item) => (item.id || item.movie_id) === (movieRow.id || movieRow.movie_id) ? { ...item, ...data.data } : item));
+      } else {
+        window.alert(data.message || 'Failed to update movie');
+      }
+    } catch (error) {
+      window.alert(error.message || 'Failed to update movie');
     }
   };
 
@@ -154,6 +185,7 @@ const MovieManagement = ({ genre }) => {
                   <th style={{ textAlign: 'left', padding: '12px' }}>Year</th>
                   <th style={{ textAlign: 'left', padding: '12px' }}>Rating</th>
                   <th style={{ textAlign: 'left', padding: '12px' }}>Created</th>
+                  <th style={{ textAlign: 'left', padding: '12px' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -165,10 +197,28 @@ const MovieManagement = ({ genre }) => {
                     <td style={{ padding: '12px' }}>{m.release_year}</td>
                     <td style={{ padding: '12px' }}>⭐ {m.rating || 'N/A'}</td>
                     <td style={{ padding: '12px' }}>{m.created_at ? new Date(m.created_at).toLocaleDateString() : 'N/A'}</td>
+                    <td style={{ padding: '12px' }}>
+                      <button
+                        type="button"
+                        onClick={() => handleEditMovie(m)}
+                        style={{
+                          border: '1px solid rgba(4,211,97,0.35)',
+                          background: 'rgba(4,211,97,0.12)',
+                          color: '#04d361',
+                          borderRadius: '8px',
+                          padding: '6px 10px',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          fontWeight: 600
+                        }}
+                      >
+                        Edit
+                      </button>
+                    </td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan="6" style={{ padding: '20px', textAlign: 'center', color: '#666' }}>No movies found</td>
+                    <td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: '#666' }}>No movies found</td>
                   </tr>
                 )}
               </tbody>
