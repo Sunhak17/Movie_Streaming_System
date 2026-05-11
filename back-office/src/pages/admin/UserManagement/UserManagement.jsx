@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout';
 import { useAuth } from '../../../components/auth/AuthContext';
+import EditUserModal from '../Dashboard/components/EditUserModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -11,6 +12,8 @@ const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [editingUser, setEditingUser] = useState(null);
+  const [showUserModal, setShowUserModal] = useState(false);
 
   const getAuthToken = () => {
     return localStorage.getItem('authToken');
@@ -68,41 +71,28 @@ const UserManagement = () => {
     }
   };
 
-  const handleEditUser = async (userRow) => {
-    const user_name = window.prompt('Edit user name:', userRow.user_name);
-    if (user_name === null) return;
+  const handleEditUser = (userRow) => {
+    setEditingUser(userRow);
+    setShowUserModal(true);
+  };
 
-    const user_email = window.prompt('Edit user email:', userRow.user_email);
-    if (user_email === null) return;
-
-    const role = window.prompt('Edit role (user/admin):', userRow.role);
-    if (role === null) return;
-
-    const subscription_plan = window.prompt('Edit subscription (Basic/Standard/Premium or leave blank):', userRow.subscription_plan || '');
-    if (subscription_plan === null) return;
-
-    const isActiveAnswer = window.confirm('Click OK for Active, Cancel for Inactive');
-
+  const handleSaveUser = async (formData) => {
     try {
-      const response = await fetchWithAuth(`${API_BASE}/admin/users/${userRow.user_id}`, {
+      const response = await fetchWithAuth(`${API_BASE}/admin/users/${editingUser.user_id}`, {
         method: 'PUT',
-        body: JSON.stringify({
-          user_name: user_name.trim(),
-          user_email: user_email.trim(),
-          role: role.trim(),
-          subscription_plan: subscription_plan.trim(),
-          is_active: isActiveAnswer
-        })
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
       if (data.success) {
-        setUsers((currentUsers) => currentUsers.map((item) => item.user_id === userRow.user_id ? { ...item, ...data.data } : item));
+        setUsers((currentUsers) => currentUsers.map((item) => item.user_id === editingUser.user_id ? { ...item, ...data.data } : item));
+        setShowUserModal(false);
+        setEditingUser(null);
       } else {
-        window.alert(data.message || 'Failed to update user');
+        throw new Error(data.message || 'Failed to update user');
       }
     } catch (error) {
-      window.alert(error.message || 'Failed to update user');
+      throw error;
     }
   };
 
@@ -213,6 +203,16 @@ const UserManagement = () => {
           </div>
         )}
       </div>
+
+      <EditUserModal
+        user={editingUser}
+        isOpen={showUserModal}
+        onClose={() => {
+          setShowUserModal(false);
+          setEditingUser(null);
+        }}
+        onSave={handleSaveUser}
+      />
     </AdminLayout>
   );
 };

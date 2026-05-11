@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout';
 import { useAuth } from '../../../components/auth/AuthContext';
+import EditMovieModal from '../Dashboard/components/EditMovieModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -12,6 +13,8 @@ const MovieManagement = ({ genre }) => {
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [editingMovie, setEditingMovie] = useState(null);
+  const [showMovieModal, setShowMovieModal] = useState(false);
 
   const getAuthToken = () => {
     return localStorage.getItem('authToken');
@@ -93,38 +96,28 @@ const MovieManagement = ({ genre }) => {
     }
   };
 
-  const handleEditMovie = async (movieRow) => {
-    const title = window.prompt('Edit movie title:', movieRow.title);
-    if (title === null) return;
+  const handleEditMovie = (movieRow) => {
+    setEditingMovie(movieRow);
+    setShowMovieModal(true);
+  };
 
-    const category = window.prompt('Edit category (cdrama/kdrama/hollywood):', movieRow.category || 'cdrama');
-    if (category === null) return;
-
-    const release_year = window.prompt('Edit release year:', movieRow.release_year || '');
-    if (release_year === null) return;
-
-    const rating = window.prompt('Edit rating:', movieRow.rating ?? '');
-    if (rating === null) return;
-
+  const handleSaveMovie = async (formData) => {
     try {
-      const response = await fetchWithAuth(`${API_BASE}/admin/movies/${movieRow.id || movieRow.movie_id}`, {
+      const response = await fetchWithAuth(`${API_BASE}/admin/movies/${editingMovie.id || editingMovie.movie_id}`, {
         method: 'PUT',
-        body: JSON.stringify({
-          title: title.trim(),
-          category: category.trim().toLowerCase(),
-          release_year: release_year.trim(),
-          rating: rating.trim()
-        })
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
       if (data.success) {
-        setMovies((currentMovies) => currentMovies.map((item) => (item.id || item.movie_id) === (movieRow.id || movieRow.movie_id) ? { ...item, ...data.data } : item));
+        setMovies((currentMovies) => currentMovies.map((item) => (item.id || item.movie_id) === (editingMovie.id || editingMovie.movie_id) ? { ...item, ...data.data } : item));
+        setShowMovieModal(false);
+        setEditingMovie(null);
       } else {
-        window.alert(data.message || 'Failed to update movie');
+        throw new Error(data.message || 'Failed to update movie');
       }
     } catch (error) {
-      window.alert(error.message || 'Failed to update movie');
+      throw error;
     }
   };
 
@@ -226,6 +219,17 @@ const MovieManagement = ({ genre }) => {
           </div>
         )}
       </div>
+
+      <EditMovieModal
+        movie={editingMovie}
+        isOpen={showMovieModal}
+        onClose={() => {
+          setShowMovieModal(false);
+          setEditingMovie(null);
+        }}
+        onSave={handleSaveMovie}
+        genres={genres}
+      />
     </AdminLayout>
   );
 };

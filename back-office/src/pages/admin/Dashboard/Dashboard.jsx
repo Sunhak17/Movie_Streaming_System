@@ -7,6 +7,8 @@ import DashboardOverview from './components/DashboardOverview';
 import UsersTable from './components/UsersTable';
 import MoviesTable from './components/MoviesTable';
 import DashboardRightRail from './components/DashboardRightRail';
+import EditMovieModal from './components/EditMovieModal';
+import EditUserModal from './components/EditUserModal';
 import './Dashboard.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -21,6 +23,10 @@ const Dashboard = () => {
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [editingUser, setEditingUser] = useState(null);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [editingMovie, setEditingMovie] = useState(null);
+  const [showMovieModal, setShowMovieModal] = useState(false);
 
   const getAuthToken = () => {
     return localStorage.getItem('authToken');
@@ -167,82 +173,59 @@ const Dashboard = () => {
     navigate('/login');
   };
 
-  const handleEditUser = async (userRow) => {
-    const user_name = window.prompt('Edit user name:', userRow.user_name);
-    if (user_name === null) return;
+  const handleEditUser = (userRow) => {
+    setEditingUser(userRow);
+    setShowUserModal(true);
+  };
 
-    const user_email = window.prompt('Edit user email:', userRow.user_email);
-    if (user_email === null) return;
-
-    const role = window.prompt('Edit role (user/admin):', userRow.role);
-    if (role === null) return;
-
-    const subscription_plan = window.prompt('Edit subscription (Basic/Standard/Premium or leave blank):', userRow.subscription_plan || '');
-    if (subscription_plan === null) return;
-
-    const isActiveAnswer = window.confirm('Click OK for Active, Cancel for Inactive');
-
+  const handleSaveUser = async (formData) => {
     try {
-      const response = await fetchWithAuth(`${API_BASE}/admin/users/${userRow.user_id}`, {
+      const response = await fetchWithAuth(`${API_BASE}/admin/users/${editingUser.user_id}`, {
         method: 'PUT',
-        body: JSON.stringify({
-          user_name: user_name.trim(),
-          user_email: user_email.trim(),
-          role: role.trim(),
-          subscription_plan: subscription_plan.trim(),
-          is_active: isActiveAnswer
-        })
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
       if (data.success) {
-        setUsers((currentUsers) => currentUsers.map((item) => item.user_id === userRow.user_id ? { ...item, ...data.data } : item));
+        setUsers((currentUsers) => currentUsers.map((item) => item.user_id === editingUser.user_id ? { ...item, ...data.data } : item));
         if (activeTab === 'overview') {
           fetchStats();
         }
+        setShowUserModal(false);
+        setEditingUser(null);
       } else {
-        window.alert(data.message || 'Failed to update user');
+        throw new Error(data.message || 'Failed to update user');
       }
     } catch (error) {
-      window.alert(error.message || 'Failed to update user');
+      throw error;
     }
   };
 
-  const handleEditMovie = async (movieRow) => {
-    const title = window.prompt('Edit movie title:', movieRow.title);
-    if (title === null) return;
+  const handleEditMovie = (movieRow) => {
+    setEditingMovie(movieRow);
+    setShowMovieModal(true);
+  };
 
-    const category = window.prompt('Edit category (cdrama/kdrama/hollywood):', movieRow.category || 'cdrama');
-    if (category === null) return;
-
-    const release_year = window.prompt('Edit release year:', movieRow.release_year || '');
-    if (release_year === null) return;
-
-    const rating = window.prompt('Edit rating:', movieRow.rating ?? '');
-    if (rating === null) return;
-
+  const handleSaveMovie = async (formData) => {
     try {
-      const response = await fetchWithAuth(`${API_BASE}/admin/movies/${movieRow.id || movieRow.movie_id}`, {
+      const response = await fetchWithAuth(`${API_BASE}/admin/movies/${editingMovie.id || editingMovie.movie_id}`, {
         method: 'PUT',
-        body: JSON.stringify({
-          title: title.trim(),
-          category: category.trim().toLowerCase(),
-          release_year: release_year.trim(),
-          rating: rating.trim()
-        })
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
       if (data.success) {
-        setMovies((currentMovies) => currentMovies.map((item) => (item.id || item.movie_id) === (movieRow.id || movieRow.movie_id) ? { ...item, ...data.data } : item));
+        setMovies((currentMovies) => currentMovies.map((item) => (item.id || item.movie_id) === (editingMovie.id || editingMovie.movie_id) ? { ...item, ...data.data } : item));
         if (activeTab === 'overview') {
           fetchMovies();
         }
+        setShowMovieModal(false);
+        setEditingMovie(null);
       } else {
-        window.alert(data.message || 'Failed to update movie');
+        throw new Error(data.message || 'Failed to update movie');
       }
     } catch (error) {
-      window.alert(error.message || 'Failed to update movie');
+      throw error;
     }
   };
 
@@ -325,6 +308,27 @@ const Dashboard = () => {
           <DashboardRightRail />
         </div>
       </div>
+
+      <EditUserModal
+        user={editingUser}
+        isOpen={showUserModal}
+        onClose={() => {
+          setShowUserModal(false);
+          setEditingUser(null);
+        }}
+        onSave={handleSaveUser}
+      />
+
+      <EditMovieModal
+        movie={editingMovie}
+        isOpen={showMovieModal}
+        onClose={() => {
+          setShowMovieModal(false);
+          setEditingMovie(null);
+        }}
+        onSave={handleSaveMovie}
+        genres={genres.filter(g => g.id !== '')}
+      />
     </AdminLayout>
   );
 };
