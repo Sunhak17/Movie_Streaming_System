@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout';
 import { useAuth } from '../../../components/auth/AuthContext';
-import DashboardTabs from './components/DashboardTabs';
-import DashboardOverview from './components/DashboardOverview';
+import DashboardTabs from './components/dashboard/DashboardTabs';
+import DashboardOverview from './components/dashboard/DashboardOverview';
 import UsersTable from './components/UsersTable';
 import MoviesTable from './components/MoviesTable';
-import DashboardRightRail from './components/DashboardRightRail';
-import EditMovieModal from './components/EditMovieModal';
-import EditUserModal from './components/EditUserModal';
-import './Dashboard.css';
+import DashboardRightRail from './components/dashboard/DashboardRightRail';
+import EditMovieModal from './components/edit/EditMovieModal';
+import EditUserModal from './components/edit/EditUserModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -269,11 +268,11 @@ const Dashboard = () => {
 
   return (
     <AdminLayout>
-      <div className="dashboard">
+      <div className="mx-auto max-w-[1600px]">
         <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <div className="dashboard-grid">
-          <div className="dashboard-left">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="flex min-w-0 flex-col gap-6">
             {activeTab === 'overview' && (
               <DashboardOverview
                 loading={loading}

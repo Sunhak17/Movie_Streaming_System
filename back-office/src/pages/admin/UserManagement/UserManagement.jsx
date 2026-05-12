@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout';
 import { useAuth } from '../../../components/auth/AuthContext';
-import EditUserModal from '../Dashboard/components/EditUserModal';
+import EditUserModal from '../Dashboard/components/edit/EditUserModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -14,6 +14,20 @@ const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingUser, setEditingUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const PAGE_SIZE = 15;
+
+  useEffect(() => {
+    setPage(1);
+  }, [users, searchTerm]);
+
+  const sortedUsers = React.useMemo(() => {
+    return [...(users || [])].sort((a, b) => (Number(a.user_id) || 0) - (Number(b.user_id) || 0));
+  }, [users]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedUsers.length / PAGE_SIZE));
+  const pageUsers = sortedUsers.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const getAuthToken = () => {
     return localStorage.getItem('authToken');
@@ -129,10 +143,10 @@ const UserManagement = () => {
           />
         </div>
 
-        {loading ? (
-          <div style={{ padding: '20px', textAlign: 'center', color: '#a7bdb6' }}>Loading...</div>
-        ) : (
-          <div style={{ overflowX: 'auto' }}>
+            {loading ? (
+            <div style={{ padding: '20px', textAlign: 'center', color: '#a7bdb6' }}>Loading...</div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', fontSize: '13px', color: '#e6f9f0' }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid rgba(4,211,97,0.2)' }}>
@@ -146,7 +160,7 @@ const UserManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.length > 0 ? users.map(u => (
+                {pageUsers.length > 0 ? pageUsers.map(u => (
                   <tr key={u.user_id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                     <td style={{ padding: '12px' }}>{u.user_id}</td>
                     <td style={{ padding: '12px' }}>{u.user_name}</td>
@@ -202,6 +216,15 @@ const UserManagement = () => {
             </table>
           </div>
         )}
+
+        <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#cbd9d2' }}>
+          <div>Showing {Math.min(sortedUsers.length, (page - 1) * PAGE_SIZE + 1)}-{Math.min(sortedUsers.length, page * PAGE_SIZE)} of {sortedUsers.length}</div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))} style={{ padding: '6px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.03)' }}>Prev</button>
+            <div>{page} / {totalPages}</div>
+            <button disabled={page >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))} style={{ padding: '6px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.03)' }}>Next</button>
+          </div>
+        </div>
       </div>
 
       <EditUserModal

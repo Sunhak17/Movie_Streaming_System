@@ -1,86 +1,71 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+const PAGE_SIZE = 15;
 
 const UsersTable = ({ users, loading, searchTerm, setSearchTerm, onEditUser }) => {
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [users, searchTerm]);
+
+  const sorted = React.useMemo(() => {
+    if (!users) return [];
+    return [...users].sort((a, b) => (Number(a.user_id) || 0) - (Number(b.user_id) || 0));
+  }, [users]);
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const pageItems = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   return (
-    <div className="table-section">
-      <div style={{ marginBottom: '16px' }}>
+    <div className="rounded-2xl border border-white/8 bg-slate-900/80 p-5 shadow-sm">
+      <div className="mb-4">
         <input
           type="text"
-          placeholder="🔍 Search users by name or email..."
+          placeholder="Search users by name or email..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px 14px',
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(4,211,97,0.3)',
-            borderRadius: '8px',
-            color: '#e6f9f0',
-            fontSize: '14px',
-            outline: 'none'
-          }}
+          className="w-full rounded-xl border border-emerald-400/20 bg-white/5 px-4 py-2.5 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-emerald-400/40 focus:ring-2 focus:ring-emerald-400/10"
         />
       </div>
 
       {loading ? (
-        <div style={{ padding: '20px', textAlign: 'center' }}>Loading users...</div>
+        <div className="py-5 text-center text-sm text-slate-400">Loading users...</div>
       ) : (
-        <div className="data-table" style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', fontSize: '13px' }}>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[860px] text-sm text-slate-200">
             <thead>
-              <tr style={{ borderBottom: '2px solid rgba(4,211,97,0.2)' }}>
-                <th style={{ textAlign: 'left', padding: '12px' }}>ID</th>
-                <th style={{ textAlign: 'left', padding: '12px' }}>Name</th>
-                <th style={{ textAlign: 'left', padding: '12px' }}>Email</th>
-                <th style={{ textAlign: 'left', padding: '12px' }}>Role</th>
-                <th style={{ textAlign: 'left', padding: '12px' }}>Status</th>
-                <th style={{ textAlign: 'left', padding: '12px' }}>Subscription</th>
-                <th style={{ textAlign: 'left', padding: '12px' }}>Action</th>
+              <tr className="border-b border-emerald-400/15 text-left text-xs uppercase tracking-[0.08em] text-slate-500">
+                <th className="px-3 py-3">ID</th>
+                <th className="px-3 py-3">Name</th>
+                <th className="px-3 py-3">Email</th>
+                <th className="px-3 py-3">Role</th>
+                <th className="px-3 py-3">Status</th>
+                <th className="px-3 py-3">Subscription</th>
+                <th className="px-3 py-3">Action</th>
               </tr>
             </thead>
             <tbody>
-              {users.length > 0 ? users.map((u) => (
-                <tr key={u.user_id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <td style={{ padding: '12px' }}>{u.user_id}</td>
-                  <td style={{ padding: '12px' }}>{u.user_name}</td>
-                  <td style={{ padding: '12px' }}>{u.user_email}</td>
-                  <td style={{ padding: '12px' }}>
-                    <span style={{
-                      background: u.role === 'admin' ? 'rgba(16,185,129,0.2)' : 'rgba(59,11,11,0.2)',
-                      color: u.role === 'admin' ? '#04d361' : '#ffcfcf',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '12px'
-                    }}>
+              {pageItems.length > 0 ? pageItems.map((u) => (
+                <tr key={u.user_id} className="border-b border-white/5">
+                  <td className="px-3 py-3">{u.user_id}</td>
+                  <td className="px-3 py-3">{u.user_name}</td>
+                  <td className="px-3 py-3">{u.user_email}</td>
+                  <td className="px-3 py-3">
+                    <span className={`rounded-md px-2 py-1 text-xs font-semibold ${u.role === 'admin' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-rose-500/10 text-rose-200'}`}>
                       {u.role}
                     </span>
                   </td>
-                  <td style={{ padding: '12px' }}>
-                    <span style={{
-                      background: u.is_active ? 'rgba(16,185,129,0.2)' : 'rgba(59,11,11,0.2)',
-                      color: u.is_active ? '#04d361' : '#ffcfcf',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '12px'
-                    }}>
+                  <td className="px-3 py-3">
+                    <span className={`rounded-md px-2 py-1 text-xs font-semibold ${u.is_active ? 'bg-emerald-500/15 text-emerald-300' : 'bg-rose-500/10 text-rose-200'}`}>
                       {u.is_active ? 'Active' : 'Inactive'}
                     </span>
                   </td>
-                  <td style={{ padding: '12px' }}>{u.subscription_plan || 'Free'}</td>
-                  <td style={{ padding: '12px' }}>
+                  <td className="px-3 py-3">{u.subscription_plan || 'Free'}</td>
+                  <td className="px-3 py-3">
                     <button
                       type="button"
                       onClick={() => onEditUser?.(u)}
-                      style={{
-                        border: '1px solid rgba(4,211,97,0.35)',
-                        background: 'rgba(4,211,97,0.12)',
-                        color: '#04d361',
-                        borderRadius: '8px',
-                        padding: '6px 10px',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        fontWeight: 600
-                      }}
+                      className="rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-500/20"
                     >
                       Edit
                     </button>
@@ -88,13 +73,32 @@ const UsersTable = ({ users, loading, searchTerm, setSearchTerm, onEditUser }) =
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan="7" style={{ padding: '20px', textAlign: 'center', color: '#666' }}>No users found</td>
+                  <td colSpan="7" className="px-3 py-6 text-center text-sm text-slate-500">No users found</td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
       )}
+
+      <div className="mt-3 flex items-center justify-between text-sm text-slate-400">
+        <div>Showing {Math.min(sorted.length, (page - 1) * PAGE_SIZE + 1)}-{Math.min(sorted.length, page * PAGE_SIZE)} of {sorted.length}</div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            disabled={page <= 1}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            className="rounded px-3 py-1 bg-white/5 disabled:opacity-40"
+          >Prev</button>
+          <div className="px-2">{page} / {totalPages}</div>
+          <button
+            type="button"
+            disabled={page >= totalPages}
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            className="rounded px-3 py-1 bg-white/5 disabled:opacity-40"
+          >Next</button>
+        </div>
+      </div>
     </div>
   );
 };

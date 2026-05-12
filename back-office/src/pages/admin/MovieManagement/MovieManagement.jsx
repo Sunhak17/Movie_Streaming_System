@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout';
 import { useAuth } from '../../../components/auth/AuthContext';
-import EditMovieModal from '../Dashboard/components/EditMovieModal';
+import EditMovieModal from '../Dashboard/components/edit/EditMovieModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
@@ -15,6 +15,20 @@ const MovieManagement = ({ genre }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingMovie, setEditingMovie] = useState(null);
   const [showMovieModal, setShowMovieModal] = useState(false);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 15;
+
+  useEffect(() => {
+    setPage(1);
+  }, [movies, searchTerm, genre]);
+
+  const sortedMovies = React.useMemo(() => {
+    if (!movies) return [];
+    return [...movies].sort((a, b) => (Number(a.id || a.movie_id) || 0) - (Number(b.id || b.movie_id) || 0));
+  }, [movies]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedMovies.length / PAGE_SIZE));
+  const pageMovies = sortedMovies.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const getAuthToken = () => {
     return localStorage.getItem('authToken');
@@ -173,6 +187,7 @@ const MovieManagement = ({ genre }) => {
               <thead>
                 <tr style={{ borderBottom: '2px solid rgba(4,211,97,0.2)' }}>
                   <th style={{ textAlign: 'left', padding: '12px' }}>ID</th>
+                  <th style={{ textAlign: 'left', padding: '12px' }}>Image</th>
                   <th style={{ textAlign: 'left', padding: '12px' }}>Title</th>
                   <th style={{ textAlign: 'left', padding: '12px' }}>Genre</th>
                   <th style={{ textAlign: 'left', padding: '12px' }}>Year</th>
@@ -182,9 +197,22 @@ const MovieManagement = ({ genre }) => {
                 </tr>
               </thead>
               <tbody>
-                {movies.length > 0 ? movies.map(m => (
+                {pageMovies.length > 0 ? pageMovies.map(m => (
                   <tr key={m.id || m.movie_id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                     <td style={{ padding: '12px' }}>{m.id || m.movie_id}</td>
+                    <td style={{ padding: '12px' }}>
+                      {m.image ? (
+                        <img
+                          src={m.image}
+                          alt={m.title}
+                          style={{ width: '40px', height: '56px', objectFit: 'cover', borderRadius: '6px', boxShadow: '0 0 0 1px rgba(255,255,255,0.08)' }}
+                        />
+                      ) : (
+                        <div style={{ width: '40px', height: '56px', borderRadius: '6px', background: 'rgba(255,255,255,0.05)', color: '#7b8a84', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px' }}>
+                          No Img
+                        </div>
+                      )}
+                    </td>
                     <td style={{ padding: '12px' }}>{m.title}</td>
                     <td style={{ padding: '12px' }}>{getGenreName(m.genre_id)}</td>
                     <td style={{ padding: '12px' }}>{m.release_year}</td>
@@ -218,6 +246,14 @@ const MovieManagement = ({ genre }) => {
             </table>
           </div>
         )}
+        <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#cbd9d2' }}>
+          <div>Showing {Math.min(sortedMovies.length, (page - 1) * PAGE_SIZE + 1)}-{Math.min(sortedMovies.length, page * PAGE_SIZE)} of {sortedMovies.length}</div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))} style={{ padding: '6px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.03)' }}>Prev</button>
+            <div>{page} / {totalPages}</div>
+            <button disabled={page >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))} style={{ padding: '6px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.03)' }}>Next</button>
+          </div>
+        </div>
       </div>
 
       <EditMovieModal

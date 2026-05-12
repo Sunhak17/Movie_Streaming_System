@@ -238,13 +238,15 @@ export const addMovie = async (req, res) => {
       genre_id = parseInt(movieData.genre_id);
     }
 
+    const imageUrl = movieData.image !== undefined ? movieData.image : movieData.poster_url;
+
     const newMovie = await Movie.create({
       title: movieData.title,
       description: movieData.description || '',
       genre_id: genre_id,
       release_year: movieData.release_year || new Date().getFullYear(),
       rating: movieData.rating || 0,
-      image: movieData.poster_url || null // Use the image field for poster
+      image: imageUrl || null
     });
 
     res.status(201).json({ 
@@ -284,6 +286,8 @@ export const updateMovie = async (req, res) => {
       genre_id = movieData.genre_id && movieData.genre_id !== '' ? parseInt(movieData.genre_id) : null;
     }
 
+    const imageUrl = movieData.image !== undefined ? movieData.image : movieData.poster_url;
+
     await movie.update({
       title: movieData.title || movie.title,
       description: movieData.description !== undefined ? movieData.description : movie.description,
@@ -291,7 +295,7 @@ export const updateMovie = async (req, res) => {
       category: movieData.category ? movieData.category.toLowerCase() : movie.category,
       release_year: movieData.release_year || movie.release_year,
       rating: movieData.rating !== undefined ? movieData.rating : movie.rating,
-      image: movieData.poster_url !== undefined ? movieData.poster_url : movie.image
+      image: imageUrl !== undefined ? imageUrl : movie.image
     });
 
     res.json({ 
