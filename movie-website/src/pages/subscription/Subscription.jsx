@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../components/auth/AuthContext';
 import apiService from '../../components/apiService';
+import ProfileLayout from '../../components/layout/ProfileLayout';
 import '../../styles/subscription/Subscription.css';
 import logo from '../../assets/Logo.png';
 
 const Subscription = () => {
-  const { user, logout, refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -376,22 +377,22 @@ const Subscription = () => {
   }
 
   return (
-    <div className="subscription-container" key={refreshKey}>
-      <header className="subscription-header">
-        <img 
-          src={logo} 
-          alt="Watch2Day Logo" 
-          className="logo" 
-          onClick={handleBackToHome}
-          style={{ cursor: 'pointer' }}
-        />
-        <div className="header-actions">
-          <span className="user-greeting">Hello, {user.user_name}!</span>
-          <button onClick={logout} className="logout-btn">Logout</button>
-        </div>
-      </header>
+    <ProfileLayout key={refreshKey}>
+      <div className="subscription-page">
+        <header className="subscription-header">
+          <img 
+            src={logo} 
+            alt="Watch2Day Logo" 
+            className="logo" 
+            onClick={handleBackToHome}
+            style={{ cursor: 'pointer' }}
+          />
+          <div className="header-actions">
+            <span className="user-greeting">Hello, {user.user_name}!</span>
+          </div>
+        </header>
 
-      <div className="subscription-content">
+        <div className="subscription-content">
         <div className="subscription-info">
           <h2>Current Subscription</h2>
           <div className="current-plan">
@@ -502,8 +503,9 @@ const Subscription = () => {
             {message}
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </ProfileLayout>
   );
 };
 

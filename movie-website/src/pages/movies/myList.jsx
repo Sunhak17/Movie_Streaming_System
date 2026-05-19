@@ -1,21 +1,10 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../components/auth/AuthContext';
-import '../../styles/movies/myList.css'; 
-import logo from '../../assets/Logo.png'; 
+import ProfileLayout from '../../components/layout/ProfileLayout';
+import '../../styles/movies/myList.css';
 
 const myList = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login'); // Redirect to login after logout
-  };
-
-  const handleBackToHome = () => {
-    navigate('/home'); // Navigate to home page
-  };
+  const { user } = useAuth();
 
   // Sample watchlist data (replace with actual data from useAuth or API)
   const myListData = user?.myList || [
@@ -25,31 +14,10 @@ const myList = () => {
   ];
 
   return (
-    <div className="my-list-page">
-      {/* Sidebar */}
-      <div className="sidebar">
-        <div className="user-info">
-          <img src={logo} alt="User Avatar" className="user-avatar" />
-          <span>{user?.name || 'Zendy'}</span>
-        </div>
-        <button className="join-premier">JOIN PREMIER</button>
-        <ul className="nav-menu">
-          <li onClick={() => navigate('/profile')}>My Account</li>
-          <li onClick={() => navigate('/history')}>History</li>
-          <li onClick={() => navigate('/mylist')}>My List</li>
-          <li onClick={() => navigate('/subscription')}>Subscription</li>
-          <li onClick={handleLogout}>Logout</li>
-        </ul>
-      </div>
+    <ProfileLayout>
+      <div className="my-list-content">
+        <h1 className="my-list-title">My List</h1>
 
-      {/* Main Content */}
-      <div className="main-content">
-        <button className="back-to-home-btn" onClick={handleBackToHome}>
-          Back to Homepage
-        </button>
-        <h1>My List</h1>
-
-        {/* My List Section */}
         <div className="my-list-section">
           <div className="my-list-card">
             {myListData.length > 0 ? (
@@ -61,13 +29,12 @@ const myList = () => {
                 </div>
               ))
             ) : (
-              <p>No items in your list.</p>
+              <p className="my-list-empty">No items in your list.</p>
             )}
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="footer">
+        <div className="my-list-footer">
           <div>
             <p>About WATCH2DAY</p>
             <p>About us</p>
@@ -89,7 +56,7 @@ const myList = () => {
           </div>
         </div>
       </div>
-    </div>
+    </ProfileLayout>
   );
 };
 

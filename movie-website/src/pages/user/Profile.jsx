@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../components/auth/AuthContext';
 import apiService from '../../components/apiService';
+import ProfileLayout from '../../components/layout/ProfileLayout';
 import '../../styles/user/Profile.css';
 
 const Profile = () => {
-  const { user, logout, refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('wallet');
   const [message, setMessage] = useState('');
@@ -204,33 +205,30 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile-container" key={refreshKey}>
+    <ProfileLayout key={refreshKey}>
       <div className="profile-header">
         <h1>My Account</h1>
         <div className="user-info">
           <p>Welcome, {user.user_name}!</p>
           <p>Current Balance: <strong>${currentBalance.toFixed(2)}</strong></p>
         </div>
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
       </div>
 
       <div className="profile-content">
         <div className="tab-navigation">
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
             onClick={() => setActiveTab('profile')}
           >
             Profile Settings
           </button>
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'password' ? 'active' : ''}`}
             onClick={() => setActiveTab('password')}
           >
             Change Password
           </button>
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'wallet' ? 'active' : ''}`}
             onClick={() => setActiveTab('wallet')}
           >
@@ -248,7 +246,7 @@ const Profile = () => {
                   type="text"
                   id="name"
                   value={profileData.name}
-                  onChange={(e) => setProfileData({...profileData, name: e.target.value})}
+                  onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                   required
                 />
               </div>
@@ -258,7 +256,7 @@ const Profile = () => {
                   type="email"
                   id="email"
                   value={profileData.email}
-                  onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+                  onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                   required
                 />
               </div>
@@ -277,7 +275,7 @@ const Profile = () => {
                   type="password"
                   id="currentPassword"
                   value={passwordData.currentPassword}
-                  onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                  onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                   required
                 />
               </div>
@@ -287,7 +285,7 @@ const Profile = () => {
                   type="password"
                   id="newPassword"
                   value={passwordData.newPassword}
-                  onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                   required
                 />
               </div>
@@ -297,7 +295,7 @@ const Profile = () => {
                   type="password"
                   id="confirmPassword"
                   value={passwordData.confirmPassword}
-                  onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                  onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                   required
                 />
               </div>
@@ -326,8 +324,8 @@ const Profile = () => {
                     step="0.01"
                   />
                 </div>
-                <button 
-                  onClick={handleTopUp} 
+                <button
+                  onClick={handleTopUp}
                   disabled={isLoading || !topUpAmount || topUpAmount <= 0}
                   className="top-up-btn"
                 >
@@ -344,16 +342,7 @@ const Profile = () => {
           </div>
         )}
       </div>
-
-      <div className="navigation-links">
-        <button onClick={() => navigate('/')} className="nav-btn">
-          Back to Home
-        </button>
-        <button onClick={() => navigate('/subscription')} className="nav-btn">
-          Manage Subscription
-        </button>
-      </div>
-    </div>
+    </ProfileLayout>
   );
 };
 

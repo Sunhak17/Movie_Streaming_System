@@ -60,16 +60,24 @@ export const AuthProvider = ({ children }) => {
       
       console.log('📡 Response status:', response.status);
       console.log('📡 Response ok:', response.ok);
-      
+
+      let data = null;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error('❌ Failed to parse login response:', parseError);
+      }
+      console.log('📡 Login API response:', data);
+
       if (!response.ok) {
         console.error('❌ HTTP error:', response.status, response.statusText);
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        return {
+          success: false,
+          message: data?.message || `HTTP ${response.status}: ${response.statusText}`
+        };
       }
       
-      const data = await response.json();
-      console.log('📡 Login API response:', data);
-      
-      if (data.success && data.data?.token) {
+      if (data?.success && data.data?.token) {
         // Clear any existing auth data first
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
@@ -81,8 +89,8 @@ export const AuthProvider = ({ children }) => {
         console.log('✅ User authenticated successfully:', data.data.user);
         return { success: true, user: data.data.user };
       } else {
-        console.error('❌ Login failed:', data.message);
-        return { success: false, message: data.message || 'Login failed' };
+        console.error('❌ Login failed:', data?.message);
+        return { success: false, message: data?.message || 'Login failed' };
       }
     } catch (error) {
       console.error('💥 Login error:', error);

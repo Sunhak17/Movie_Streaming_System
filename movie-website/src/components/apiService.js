@@ -10,6 +10,9 @@ const headers = () => ({
 const buildUrl = (path) => `${API_BASE}${path}`;
 
 const apiService = {
+  getToken() {
+    return getToken();
+  },
 
   async makeRequest(path, config = {}) {
     try {

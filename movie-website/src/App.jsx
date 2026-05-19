@@ -10,6 +10,7 @@ import Hollywood from './pages/movies/Hollywood';
 import Search from './components/search/Search';
 import MoviePlayer from './pages/movies/MoviePlayer';
 import Profile from './pages/user/Profile';
+import History from './pages/user/History';
 import PlanDetails from './pages/subscription/PlanDetails';
 import MyList from './pages/movies/myList';
 import EditProfile from './pages/user/EditProfile';
@@ -38,6 +39,7 @@ const App = () => {
                         <Route path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
                         <Route path="/movie-player" element={<PrivateRoute><MoviePlayer /></PrivateRoute>} />
                         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+                        <Route path="/history" element={<PrivateRoute><History /></PrivateRoute>} />
                         <Route path="/profile/edit" element={<PrivateRoute><EditProfile /></PrivateRoute>} />
                         <Route path="/profile/edit-password" element={<PrivateRoute><EditPassword /></PrivateRoute>} />
                         <Route path="/profile/devices" element={<PrivateRoute><ManageDevices /></PrivateRoute>} />

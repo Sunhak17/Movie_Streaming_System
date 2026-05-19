@@ -1,80 +1,31 @@
-.my-list-page {
-  display: flex;
-  height: 100vh;
-  background-color: #1a1a1a;
-  color: #fff;
+.my-list-content {
+  color: #e6ffe9;
 }
 
-.sidebar {
-  width: 250px;
-  background-color: #333;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.user-info {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-
-.join-premier {
-  background-color: #00cc00;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.nav-menu {
-  list-style: none;
-  padding: 0;
-  width: 100%;
-}
-
-.nav-menu li {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.nav-menu li:hover {
-  background-color: #444;
-}
-
-.main-content {
-  flex: 1;
-  padding: 20px;
-}
-
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
+.my-list-title {
+  font-size: 2rem;
+  margin: 0 0 20px 0;
+  background: linear-gradient(45deg, #18c255, #e6ffe9);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .my-list-section {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .my-list-card {
-  background-color: #000;
+  background-color: #0f0f0f;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 10px;
+  border: 1px solid rgba(24, 194, 85, 0.2);
 }
 
 .my-list-item {
   margin-bottom: 15px;
-  padding: 10px;
-  border-bottom: 1px solid #444;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(24, 194, 85, 0.2);
 }
 
 .my-list-item:last-child {
@@ -82,51 +33,44 @@ h1 {
 }
 
 .my-list-item h3 {
-  margin: 0 0 5px 0;
+  margin: 0 0 6px 0;
 }
 
 .my-list-item p {
   margin: 0;
-  color: #aaa;
+  color: #cfe9d6;
 }
 
 .status {
-  color: #00cc00; /* Green for status */
+  color: #18c255;
 }
 
 .remove-btn {
-  background-color: #ff4d4d; /* Red for remove */
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
+  margin-top: 10px;
+  background-color: rgba(24, 194, 85, 0.12);
+  color: #e6ffe9;
+  border: 1px solid rgba(24, 194, 85, 0.4);
+  padding: 6px 12px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 .remove-btn:hover {
-  background-color: #e60000; /* Darker red on hover */
+  background-color: rgba(24, 194, 85, 0.22);
+  border-color: #18c255;
 }
 
-.footer {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+.my-list-empty {
+  margin: 0;
+  color: #cfe9d6;
+}
+
+.my-list-footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid #444;
-}
-
-/* Back to Homepage Button */
-.back-to-home-btn {
-  background-color: #00cc00;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.back-to-home-btn:hover {
-  background-color: #008000;
+  border-top: 1px solid rgba(24, 194, 85, 0.2);
+  color: #cfe9d6;
 }
